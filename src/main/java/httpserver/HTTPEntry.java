@@ -10,7 +10,7 @@ import java.io.OutputStream;
 
 public abstract class HTTPEntry implements HttpHandler {
 
-    public boolean log = false;
+    public boolean log = true;
 
     public HTTPEntry() {
 

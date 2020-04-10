@@ -7,12 +7,14 @@ import java.io.IOException;
 public class main {
     public static void main(String[] args) {
         try {
+            System.out.println(SimpelSerial.getPortNames()[0].getSystemPortName());
             final SimpelSerial serial = new SimpelSerial(SimpelSerial.getPortNames()[0]);
             serial.start();
 
-            SimpleHTTPServer server = new SimpleHTTPServer("localhost", 80);
+            SimpleHTTPServer server = new SimpleHTTPServer("0.0.0.0", 80);
             server.startServer();
             server.addEntry("/command/motor/direction", new HTTPEntry() {
+
                 @Override
                 public HTTPResponse handleRequest(Request request) {
                     if(request.getRequestType() != RequestType.POST)
