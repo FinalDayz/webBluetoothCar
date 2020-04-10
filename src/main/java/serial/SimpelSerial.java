@@ -13,6 +13,8 @@ public class SimpelSerial {
     public SimpelSerial(SerialPort serialPort, int baudRate) {
         this.baudRate = baudRate;
         this.serialPort = serialPort;
+        serialPort.setComPortParameters(9600, 8, 1, SerialPort.NO_PARITY);
+        serialPort.setComPortTimeouts(SerialPort.TIMEOUT_SCANNER, 0, 0);
         serialPort.setBaudRate(this.baudRate);
     }
 
