@@ -113,7 +113,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		}
 	);
 	
-	setInterval(sendData, 50);
+	setInterval(sendData, 100);
 	
 });
 
@@ -137,7 +137,7 @@ function sendPost(url, data) {
   return;
  
  var xhr = new XMLHttpRequest();
- xhr.timeout = 200;
+ xhr.timeout = 400;
  
  xhr.onload = xhrSuccess;
  xhr.onerror = xhrFail;
