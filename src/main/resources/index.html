@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BluetoothCar</title>
+    <style>
+		.speed-slider-container {
+		top: 20vh;
+		position: absolute;
+		float: left;
+		margin-left: 50vw;
+		   transform: rotate(270deg);
+			-moz-transform: rotate(270deg);
+					padding-top: 20vh;
+          width: 80vh;
+		}
+	
+        .steer-slider-container {
+		float: left;
+		padding-top: 20vh;
+          width: 50%;
+        }
+
+        /* The slider itself */
+        .slider {
+          -webkit-appearance: none;
+          appearance: none;
+          width: 100%;
+          height: 50vh;
+          background: #d3d3d3;
+          outline: none;
+          opacity: 0.7;
+          -webkit-transition: .2s;
+          transition: opacity .2s;
+        }
+
+        /* Mouse-over effects */
+        .slider:hover {
+          opacity: 1;
+        }
+
+        /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+        .slider::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          appearance: none;
+          width: 75px;
+          height: 50vh;
+          background: #4CAF50;
+          cursor: pointer;
+        }
+
+        .slider::-moz-range-thumb {
+          width: 25px;
+          height: 25px;
+          background: #4CAF50;
+          cursor: pointer;
+        }
+		
+		h1 {
+			position: absolute;
+			width: 100%;
+			text-align: center;
+		}
+		
+		.green {
+			background-color: #A0FFC0;
+		}
+		
+		.red {
+			background-color: #FFA0C0;
+		}
+    </style>
+</head>
+<body>
+	<h1>Mobile Bluetooth car controller</h1>
+    <div class="steer-slider-container">
+        <input type="range" min="1" max="100" value="50" class="slider" id="steerSlider">
+    </div>
+	
+	<div class="speed-slider-container">
+        <input type="range" min="-100" max="100" value="0" class="slider" id="speedSlider">
+    </div>
+
+<script>
+prefData = {};
+curData = {};
+document.addEventListener("DOMContentLoaded", function(event) {
+
+  document.getElementById('steerSlider')
+    .addEventListener("input",
+        function(event){
+			var value = event.target.value;
+            
+			if(value < 65 && value > 45) {
+				event.target.value = 50;
+			}
+			
+			curData['steer'] = event.target.value
+		}
+	);
+	
+	document.getElementById('speedSlider')
+    .addEventListener("input",
+        function(event){
+			var value = event.target.value;
+            
+			if(value < 25 && value > -25) {
+				event.target.value = 0;
+			}
+			curData['direction'] = event.target.value < 0 ? 1 : 0;
+			
+			curData['speed'] = Math.abs(event.target.value);
+		}
+	);
+	
+	setInterval(sendData, 50);
+	
+});
+
+function sendData() {
+ checkCommand('direction', '/command/motor/direction');
+ 
+ checkCommand('speed', '/command/motor/speed');
+  
+ checkCommand('steer', '/command/servo/steer');
+}
+
+function checkCommand(command, url) {
+ if(curData[command] != prefData[command]) {
+  sendPost(url, command + "=" + curData[command]);
+  prefData[command] = curData[command];
+ }
+}
+
+function sendPost(url, data) {
+ if(!data)
+  return;
+ 
+ var xhr = new XMLHttpRequest();
+ xhr.timeout = 200;
+ 
+ xhr.onload = xhrSuccess;
+ xhr.onerror = xhrFail;
+ xhr.onabort = xhrFail;
+ xhr.ontimeout = xhrFail;
+ 
+ xhr.open("POST", url, true);
+ xhr.send(data);
+}
+
+function xhrSuccess() {
+ document.body.className = "green";
+ }
+ 
+function xhrFail() {
+ document.body.className = "red";
+}
+
+
+</script>
+</body>
+</html>
