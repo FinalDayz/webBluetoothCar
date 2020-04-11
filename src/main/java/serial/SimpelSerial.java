@@ -29,7 +29,20 @@ public class SimpelSerial {
         serialPort.closePort();
     }
 
-    public static SerialPort[] getPortNames() {
+    public static boolean hasPortName(String name) {
+        return getPortByName(name) != null;
+    }
+
+    public static SerialPort getPortByName(String name) {
+        for(SerialPort port : getPorts()) {
+            if(port.getSystemPortName().equals(name)) {
+                return port;
+            }
+        }
+        return null;
+    }
+
+    public static SerialPort[] getPorts() {
         return SerialPort.getCommPorts();
     }
 }
