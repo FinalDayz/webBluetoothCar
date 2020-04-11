@@ -32,7 +32,7 @@ public class WebSerial {
         final SimpelSerial serial = new SimpelSerial(SimpelSerial.getPortByName(COM_PORT));
         serial.start();
 
-        SimpleHTTPServer server = new SimpleHTTPServer("192.168.2.146", 80);
+        SimpleHTTPServer server = new SimpleHTTPServer("0.0.0.0", 80);
         server.startServer();
 
         server.addEntry(
